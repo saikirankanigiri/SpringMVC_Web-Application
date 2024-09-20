@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px 0;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>User Registration Form</h2>
+    <form id="userForm">
+        <label for="emp_name">Name:</label>
+        <input type="text" id="emp_name" name="emp_name" required>
+
+        <label for="emp_email">Email:</label>
+        <input type="email" id="emp_email" name="emp_email" required>
+
+        <label for="emp_num">Phone Number:</label>
+        <input type="text" id="emp_num" name="emp_num" required>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <p id="responseMessage"></p>
+</div>
+
+<script>
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent form submission
+
+        const user = {
+            emp_name: document.getElementById('emp_name').value,
+            emp_email: document.getElementById('emp_email').value,
+            emp_num: document.getElementById('emp_num').value
+        };
+
+        // Send POST request to store the user in the database
+        fetch('http://localhost:8080/user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('responseMessage').innerText = 'User saved successfully!';
+            console.log('Success:', data);
+        })
+        .catch((error) => {
+            document.getElementById('responseMessage').innerText = 'Error saving user.';
+            console.error('Error:', error);
+        });
+    });
+</script>
+
+</body>
+</html>
